@@ -1,8 +1,7 @@
 <template>
     <div>
-        <!-- List Group -->
         <Header />
-        <div v-for="(task, index) in data" 
+        <div v-for="task in data" 
             class="max-w-md mx-auto rounded-xl shadow-md overflow-hidden md:max-w-2xl m-5"
             :class="{'bg-emerald-200': task.completed, 'bg-white': !task.completed }">
             <div class="px-8 py-4 flex gap-4">
@@ -11,7 +10,13 @@
                     <div 
                         v-if="task.uuid === editable"
                         class="uppercase tracking-wide text-sm cursor-pointer w-full">
-                        <input @keypress.enter="updateTask" v-model="newTodo" type="text" placeholder="Update task value" class="w-full bg-white rounded py-0 border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 text-sm outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out rounded-lg">
+                        <input 
+                            @keypress.enter="updateTask" 
+                            v-model="newTodo" 
+                            type="text" 
+                            placeholder="Update task value" 
+                            class="w-full bg-white rounded py-0 border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 text-sm outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out rounded-lg"
+                        >
                     </div>
                     <div v-else
                         @click="editTask(task)"
@@ -22,7 +27,6 @@
                 <Options :task="task"/>
             </div>
         </div>
-        <!-- End List Group -->
     </div>
 </template>
 

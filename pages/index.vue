@@ -49,16 +49,6 @@
         <Subtitle text="Entrega:" />
         <ListItem text="Proporcionar el código fuente." />
         <ListItem text="Incluir instrucciones claras sobre cómo ejecutar la aplicación localmente." />
-
-        <pre class="language-bash shiki shiki-themes material-theme-lighter material-theme-palenight" style=""><!--[--><code><span class="line" line="1"><span style="--shiki-light:#90A4AE;--shiki-dark:#676E95;--shiki-light-font-style:italic;--shiki-dark-font-style:italic"># Using pnpm
-</span></span><span class="line" line="2"><span style="--shiki-light:#E2931D;--shiki-dark:#FFCB6B">pnpm</span><span style="--shiki-light:#91B859;--shiki-dark:#C3E88D"> add</span><span style="--shiki-light:#91B859;--shiki-dark:#C3E88D"> --save-dev</span><span style="--shiki-light:#91B859;--shiki-dark:#C3E88D"> @nuxtjs/tailwindcss
-</span></span><span class="line" line="3"><span emptylineplaceholder="true">
-</span></span><span class="line" line="4"><span style="--shiki-light:#90A4AE;--shiki-dark:#676E95;--shiki-light-font-style:italic;--shiki-dark-font-style:italic"># Using yarn
-</span></span><span class="line" line="5"><span style="--shiki-light:#E2931D;--shiki-dark:#FFCB6B">yarn</span><span style="--shiki-light:#91B859;--shiki-dark:#C3E88D"> add</span><span style="--shiki-light:#91B859;--shiki-dark:#C3E88D"> --dev</span><span style="--shiki-light:#91B859;--shiki-dark:#C3E88D"> @nuxtjs/tailwindcss
-</span></span><span class="line" line="6"><span emptylineplaceholder="true">
-</span></span><span class="line" line="7"><span style="--shiki-light:#90A4AE;--shiki-dark:#676E95;--shiki-light-font-style:italic;--shiki-dark-font-style:italic"># Using npm
-</span></span><span class="line" line="8"><span style="--shiki-light:#E2931D;--shiki-dark:#FFCB6B">npm</span><span style="--shiki-light:#91B859;--shiki-dark:#C3E88D"> install</span><span style="--shiki-light:#91B859;--shiki-dark:#C3E88D"> --save-dev</span><span style="--shiki-light:#91B859;--shiki-dark:#C3E88D"> @nuxtjs/tailwindcss
-</span></span></code><!--]--></pre>
       </div>
   </div>
 </template>
