@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-md mx-auto overflow-hidden md:max-w-2xl m-5 flex justify-between">
             <Title text="Tasks list" />
-            <button v-if="!showForm" @click="showTaskForm" class="flex text-white bg-emerald-500 border-0 py-2 px-8 focus:outline-none hover:bg-emerald-600 rounded text-sm">
+            <button v-if="!showForm" @click="showTaskForm" class="flex text-white bg-emerald-500 border-0 py-2 px-8 focus:outline-none hover:bg-emerald-600 rounded text-sm self-center">
                 New task
             </button>
         </div>
