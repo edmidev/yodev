@@ -1,66 +1,25 @@
 <template>
     <div>
         <!-- List Group -->
-        <div class="max-w-md mx-auto overflow-hidden md:max-w-2xl m-5 flex justify-between">
-            <p class="text-emerald-500 text-4xl">
-                Tasks list
-            </p>
-            <button v-if="!showForm" @click="showTaskForm" class="flex text-white bg-emerald-500 border-0 py-2 px-8 focus:outline-none hover:bg-emerald-600 rounded text-sm">
-                New task
-            </button>
-        </div>
-        <div class="max-w-md mx-auto overflow-hidden md:max-w-2xl m-5 flex justify-between gap-4" v-if="showForm">
-            <input @keypress.enter="addTask" v-model="newTask" type="text" placeholder="insert task to do" class="w-full bg-white rounded py-0 border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 text-sm outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out rounded-lg">
-            <div class="flex gap-4">
-                <button @click="addTask" id="inputTask" class="flex text-white bg-emerald-500 border-0 py-2 px-8 focus:outline-none hover:bg-emerald-600 rounded text-sm">
-                    Save
-                </button>
-                <button @click="cancelAddTask" id="inputTask" class="flex text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-sm">
-                    Cancel
-                </button>
-            </div>
-        </div>
+        <Header />
         <div v-for="(task, index) in data" 
             class="max-w-md mx-auto rounded-xl shadow-md overflow-hidden md:max-w-2xl m-5"
             :class="{'bg-emerald-200': task.completed, 'bg-white': !task.completed }">
             <div class="px-8 py-4 flex gap-4">
-                <div class="pr-4 text-center" :class="{'text-red-400': !task.completed, 'text-emerald-400': task.completed}">
-                    <p class="text-4xl font-bold">{{ index + 1 }}</p>
-                    <span class="text-sm">{{ task.completed ? 'Completed!' : 'Incomplete' }}</span> 
-                </div>
+                <Status :task="task"/>
                 <div class="flex items-center w-full">
                     <div 
-                        v-if="taskToEdit === index"
+                        v-if="task.uuid === editable"
                         class="uppercase tracking-wide text-sm cursor-pointer w-full">
-                        <input @keypress.enter="updateTask" v-model="newTodo" type="text" placeholder="insert task to do" class="w-full bg-white rounded py-0 border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 text-sm outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out rounded-lg">
+                        <input @keypress.enter="updateTask" v-model="newTodo" type="text" placeholder="Update task value" class="w-full bg-white rounded py-0 border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 text-sm outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out rounded-lg">
                     </div>
                     <div v-else
-                        @click="editTask(index)"
+                        @click="editTask(task)"
                         class="uppercase tracking-wide text-sm w-full" :class="{'cursor-pointer': !task.completed}">
                         {{ task.todo }}
                     </div>
                 </div>
-                <div class="pr-4 ml-auto flex gap-2 items-center">
-                    <div v-if="taskToEdit === index" class="flex gap-1">
-                        <button type="button" title="Mark as completed" @click="updateTask()">
-                            <svg width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"><g id="Page-1" stroke="none" stroke-width="1" sketch:type="MSPage"><g id="Icon-Set" sketch:type="MSLayerGroup" transform="translate(-152.000000, -515.000000)" fill="#000000"><path d="M171,525 C171.552,525 172,524.553 172,524 L172,520 C172,519.447 171.552,519 171,519 C170.448,519 170,519.447 170,520 L170,524 C170,524.553 170.448,525 171,525 L171,525 Z M182,543 C182,544.104 181.104,545 180,545 L156,545 C154.896,545 154,544.104 154,543 L154,519 C154,517.896 154.896,517 156,517 L158,517 L158,527 C158,528.104 158.896,529 160,529 L176,529 C177.104,529 178,528.104 178,527 L178,517 L180,517 C181.104,517 182,517.896 182,519 L182,543 L182,543 Z M160,517 L176,517 L176,526 C176,526.553 175.552,527 175,527 L161,527 C160.448,527 160,526.553 160,526 L160,517 L160,517 Z M180,515 L156,515 C153.791,515 152,516.791 152,519 L152,543 C152,545.209 153.791,547 156,547 L180,547 C182.209,547 184,545.209 184,543 L184,519 C184,516.791 182.209,515 180,515 L180,515 Z" id="save-floppy" sketch:type="MSShapeGroup"></path></g></g></svg>
-                        </button>
-                        <button type="button" title="Mark as completed" @click="cancelEdit()">
-                            <svg width="20px" height="20px" fill="red" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13zM16 6c-5.522 0-10 4.478-10 10s4.478 10 10 10c5.523 0 10-4.478 10-10s-4.477-10-10-10zM20.537 19.535l-1.014 1.014c-0.186 0.186-0.488 0.186-0.675 0l-2.87-2.87-2.87 2.87c-0.187 0.186-0.488 0.186-0.675 0l-1.014-1.014c-0.186-0.186-0.186-0.488 0-0.675l2.871-2.869-2.871-2.87c-0.186-0.187-0.186-0.489 0-0.676l1.014-1.013c0.187-0.187 0.488-0.187 0.675 0l2.87 2.87 2.87-2.87c0.187-0.187 0.489-0.187 0.675 0l1.014 1.013c0.186 0.187 0.186 0.489 0 0.676l-2.871 2.87 2.871 2.869c0.186 0.187 0.186 0.49 0 0.675z"></path></svg>
-                        </button>
-                    </div>
-                    <div v-else class="flex gap-1">
-                        <button type="button" title="Mark as completed" @click="markAsCompleted(index)" v-if="!task.completed">
-                            <svg width="20px" height="20px" style="fill: currentColor; color: green;" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 472.37"><path fill-rule="nonzero" d="M145.33 172.6l57.21-.75c2.76-.04 5.33.74 7.51 2.1 11.85 6.86 23.04 14.67 33.45 23.48 5.86 4.97 11.53 10.28 16.99 15.96 19.67-30.56 43.04-61.58 67.52-90.78 31.9-38.04 65.91-73.2 96.22-100.37 2.65-2.37 5.97-3.53 9.26-3.53l44.22-.07c7.7 0 13.95 6.25 13.95 13.95 0 3.86-1.56 7.34-4.09 9.87-40.58 45.12-82.2 96.78-119.92 149.72-34.92 49.02-66.55 99.17-90.93 146.26-3.52 6.83-11.92 9.51-18.75 5.99a13.796 13.796 0 01-6.23-6.5c-13.36-28.57-29.28-54.8-48.23-78.2-18.93-23.37-41-44.09-66.69-61.72-6.35-4.33-7.98-13-3.65-19.35 2.82-4.14 7.49-6.27 12.16-6.06zM62.55 0h270.16c-19.14 19.72-35.72 38.96-49.97 57.45H62.55c-1.42 0-2.71.57-3.64 1.46a5.27 5.27 0 00-1.46 3.64v347.26c0 1.34.6 2.6 1.54 3.55.96.95 2.23 1.56 3.56 1.56h386.89c1.29 0 2.55-.62 3.52-1.58.97-.97 1.59-2.24 1.59-3.53V213.59c20.82-8.61 40.4-17.48 57.45-25.81v222.03c0 17.14-7.11 32.82-18.43 44.14-11.33 11.33-26.99 18.42-44.13 18.42H62.55c-17.13 0-32.83-7.06-44.17-18.4C7.08 442.67 0 427.03 0 409.81V62.55C0 45.4 7.04 29.78 18.35 18.46l.11-.11C29.78 7.04 45.4 0 62.55 0z"/></svg>
-                        </button>                    
-                        <button type="button" title="Mark as completed" @click="editTask(index)" v-if="!task.completed">
-                            <svg width="20px" height="20px" style="fill: currentColor; color: lightskyblue; enable-background:new 0 0 121.48 122.88" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 121.48 122.88" xml:space="preserve"><g><path class="st0" d="M96.84,2.22l22.42,22.42c2.96,2.96,2.96,7.8,0,10.76l-12.4,12.4L73.68,14.62l12.4-12.4 C89.04-0.74,93.88-0.74,96.84,2.22L96.84,2.22z M70.18,52.19L70.18,52.19l0,0.01c0.92,0.92,1.38,2.14,1.38,3.34 c0,1.2-0.46,2.41-1.38,3.34v0.01l-0.01,0.01L40.09,88.99l0,0h-0.01c-0.26,0.26-0.55,0.48-0.84,0.67h-0.01 c-0.3,0.19-0.61,0.34-0.93,0.45c-1.66,0.58-3.59,0.2-4.91-1.12h-0.01l0,0v-0.01c-0.26-0.26-0.48-0.55-0.67-0.84v-0.01 c-0.19-0.3-0.34-0.61-0.45-0.93c-0.58-1.66-0.2-3.59,1.11-4.91v-0.01l30.09-30.09l0,0h0.01c0.92-0.92,2.14-1.38,3.34-1.38 c1.2,0,2.41,0.46,3.34,1.38L70.18,52.19L70.18,52.19L70.18,52.19z M45.48,109.11c-8.98,2.78-17.95,5.55-26.93,8.33 C-2.55,123.97-2.46,128.32,3.3,108l9.07-32v0l-0.03-0.03L67.4,20.9l33.18,33.18l-55.07,55.07L45.48,109.11L45.48,109.11z M18.03,81.66l21.79,21.79c-5.9,1.82-11.8,3.64-17.69,5.45c-13.86,4.27-13.8,7.13-10.03-6.22L18.03,81.66L18.03,81.66z"/></g></svg>
-                        </button>                    
-                        <button type="button" title="Delete" @click="deleteTask(index)">
-                            <svg width="20px" height="20px" style="fill: currentColor; color: red;" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108.294 122.88" enable-background="new 0 0 108.294 122.88" xml:space="preserve"><g><path d="M4.873,9.058h33.35V6.2V6.187c0-0.095,0.002-0.186,0.014-0.279c0.075-1.592,0.762-3.037,1.816-4.086l-0.007-0.007 c1.104-1.104,2.637-1.79,4.325-1.806l0.023,0.002V0h0.031h19.884h0.016c0.106,0,0.207,0.009,0.309,0.022 c1.583,0.084,3.019,0.76,4.064,1.81c1.102,1.104,1.786,2.635,1.803,4.315l-0.003,0.021h0.014V6.2v2.857h32.909h0.017 c0.138,0,0.268,0.014,0.401,0.034c1.182,0.106,2.254,0.625,3.034,1.41l0.004,0.007l0.005-0.007 c0.851,0.857,1.386,2.048,1.401,3.368l-0.002,0.032h0.014v0.032v10.829c0,1.472-1.195,2.665-2.667,2.665h-0.07H2.667 C1.195,27.426,0,26.233,0,24.762v-0.063V13.933v-0.014c0-0.106,0.004-0.211,0.018-0.315v-0.021 c0.089-1.207,0.624-2.304,1.422-3.098l-0.007-0.002C2.295,9.622,3.49,9.087,4.81,9.069l0.032,0.002V9.058H4.873L4.873,9.058z M77.79,49.097h-5.945v56.093h5.945V49.097L77.79,49.097z M58.46,49.097h-5.948v56.093h5.948V49.097L58.46,49.097z M39.13,49.097 h-5.946v56.093h5.946V49.097L39.13,49.097z M10.837,31.569h87.385l0.279,0.018l0.127,0.007l0.134,0.011h0.009l0.163,0.023 c1.363,0.163,2.638,0.789,3.572,1.708c1.04,1.025,1.705,2.415,1.705,3.964c0,0.098-0.009,0.193-0.019,0.286l-0.002,0.068 l-0.014,0.154l-7.393,79.335l-0.007,0.043h0.007l-0.016,0.139l-0.051,0.283l-0.002,0.005l-0.002,0.018 c-0.055,0.331-0.12,0.646-0.209,0.928l-0.007,0.022l-0.002,0.005l-0.009,0.018l-0.023,0.062l-0.004,0.021 c-0.118,0.354-0.264,0.698-0.432,1.009c-1.009,1.88-2.879,3.187-5.204,3.187H18.13l-0.247-0.014v0.003l-0.011-0.003l-0.032-0.004 c-0.46-0.023-0.889-0.091-1.288-0.202c-0.415-0.116-0.818-0.286-1.197-0.495l-0.009-0.002l-0.002,0.002 c-1.785-0.977-2.975-2.882-3.17-5.022L4.88,37.79l-0.011-0.125l-0.011-0.247l-0.004-0.116H4.849c0-1.553,0.664-2.946,1.707-3.971 c0.976-0.955,2.32-1.599,3.756-1.726l0.122-0.004v-0.007l0.3-0.013l0.104,0.002V31.569L10.837,31.569z M98.223,36.903H10.837 v-0.007l-0.116,0.004c-0.163,0.022-0.322,0.106-0.438,0.222c-0.063,0.063-0.104,0.132-0.104,0.179h-0.007l0.007,0.118l7.282,79.244 h-0.002l0.002,0.012c0.032,0.376,0.202,0.691,0.447,0.825l-0.002,0.004l0.084,0.032l0.063,0.012h0.077h72.695 c0.207,0,0.399-0.157,0.518-0.377l0.084-0.197l0.054-0.216l0.014-0.138h0.005l7.384-79.21L98.881,37.3 c0-0.045-0.041-0.111-0.103-0.172c-0.12-0.118-0.286-0.202-0.451-0.227L98.223,36.903L98.223,36.903z M98.334,36.901h-0.016H98.334 L98.334,36.901z M98.883,37.413v-0.004V37.413L98.883,37.413z M104.18,37.79l-0.002,0.018L104.18,37.79L104.18,37.79z M40.887,14.389H5.332v7.706h97.63v-7.706H67.907h-0.063c-1.472,0-2.664-1.192-2.664-2.664V6.2V6.168h0.007 c-0.007-0.22-0.106-0.433-0.259-0.585c-0.137-0.141-0.324-0.229-0.521-0.252h-0.082h-0.016H44.425h-0.031V5.325 c-0.213,0.007-0.422,0.104-0.576,0.259l-0.004-0.004l-0.007,0.004c-0.131,0.134-0.231,0.313-0.259,0.501l0.007,0.102V6.2v5.524 C43.554,13.196,42.359,14.389,40.887,14.389L40.887,14.389z"/></g></svg>
-                        </button>
-                    </div>
-                </div>
+                <Options :task="task"/>
             </div>
         </div>
         <!-- End List Group -->
@@ -71,64 +30,34 @@
     import { ref } from 'vue'
     import { storeToRefs } from 'pinia'
     import { useTaskStore } from '../../stores/store';
+    import Header from '../../components/tasks/header.vue'
+    import Options from '../../components/tasks/options.vue'
+    import Status from '../../components/tasks/status.vue'
+    import type { Task } from '../../interfaces/Task'
 
     // refs to store
     const taskStore = useTaskStore()
-    const { tasks: data } = storeToRefs(taskStore)
+    const { tasks: data, editable } = storeToRefs(taskStore)
 
     // define local vars
-    const showForm = ref(false)
-    const newTask = ref('')
-    const taskToEdit = ref(-1)
     const newTodo = ref('')
-    const newtaskinput = ref(null)
-
-    // Add a new task to the store
-    const addTask = () => {
-        if (!newTask.value) return
-        showForm.value = false
-        taskStore.addTask(newTask.value, false, false)
-        newTask.value = ''
-    }
-
-    // Enable new task form
-    const showTaskForm = () => {
-        showForm.value = true
-    }
-
-    // Disable new task form
-    const cancelAddTask = () => {
-        showForm.value = false
-        newTask.value = ''
-    }
-
-    // Delete task from the store
-    const deleteTask = (index: number) => {
-        taskStore.deleteTask(index)
-    }
-
-    // Mark as complete task in the store
-    const markAsCompleted = (index: number) => {
-        taskStore.markAsCompleted(index)
-    }
 
     // Enable edit specific task
-    // Just once at time
-    const editTask = (index: number) => {
-        if(data.value[index].completed) return
-        taskToEdit.value = index
-        newTodo.value = data.value[index].todo ?? ''
+    const editTask = (task: Task) => {
+        if(task.completed) return
+
+        const taskToEdit = taskStore.getTaskByUuid(task.uuid);
+
+        if (taskToEdit) {
+            newTodo.value = taskToEdit.todo;
+            taskStore.editTask(task);
+        }
     }
 
-    // Disable edit task
-    const cancelEdit = () => {
-        taskToEdit.value = -1
-    }
-
-    // Updatae task in the store
+    // Updatae task in store
     const updateTask = () => {
-        taskStore.updateTask(taskToEdit.value, newTodo.value)
-        taskToEdit.value = -1
+        taskStore.updateTask(newTodo.value)
+        newTodo.value = ''
     }
 
 </script>
