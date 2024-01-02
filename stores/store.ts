@@ -32,10 +32,9 @@ export const useTaskStore = defineStore({
         },
         deleteTask(index: number) {
             this.tasks.splice(index, 1)
+        },
+        updateTask(index: number, todo: string){
+            this.tasks[index].todo = todo
         }
     }
 })
-
-if (import.meta.hot) {
-    import.meta.hot.accept(acceptHMRUpdate(useTaskStore, import.meta.hot))
-}
