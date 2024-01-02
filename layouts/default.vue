@@ -18,7 +18,7 @@
 <style scoped>
 
     .router-link-exact-active {
-        color: #0dce5d;
+        color: #fd0000;
     }
 
 </style>
