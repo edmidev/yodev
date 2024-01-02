@@ -1,75 +1,64 @@
-# Nuxt 3 Minimal Starter
+# Aplicación Web Simple
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Objetivo:
 
-## Setup
+Desarrollar una aplicación web simple para gestionar una lista de tareas utilizando Vue.js
+(Versión 3) y otras tecnologías mencionadas.
 
-Make sure to install the dependencies:
+## Requisitos:
+### Interfaz de Usuario:
+Utilizar Vue.js (Versión 3) con Nuxt, y utilizar JSX para crear componentes Vue, para crear una interfaz que permita al usuario:
+- Ver la lista de tareas
+- Añadir una nueva tarea.
+- Marcar una tarea como completada.
+- Eliminar una tarea.
+
+## Estilo:
+- Utilizar HTML y CSS para la maquetación y estilización de la aplicación.
+- Emplear Sass como preprocesador de CSS.
+
+## Almacenamiento Local:
+- Utilizar Vuex para el manejo del estado de la aplicación.
+
+## Versionamiento:
+- Utilizar Git para el control de versiones.
+
+## Migraciones de Versiones:
+- Implementar cambios de versión en la aplicación (por ejemplo, actualización de Vue.js) y documentar el proceso de migración.
+
+## TypeScript:
+- Introducir TypeScript en el proyecto.
+
+## Tests:
+- Implementar pruebas unitarias con Jest.
+- Realizar pruebas de extremo a extremo con Cypress.
+
+## Opcionales:
+- Integrar Pinia y Vite.
+- Utilizar la Composition API de Vue.js.
+
+## Consideraciones adicionales:
+- La interfaz de usuario no necesita ser compleja.
+- La aplicación debe ser segura contra ataques comunes (se valorará la implementación de medidas de seguridad).
+- Se valorará la claridad del código y la estructura.
+
+## Entrega:
+- Proporcionar el código fuente.
+- Incluir instrucciones claras sobre cómo ejecutar la aplicación localmente.
+
+## Instrucciones para ejecutar el proyecto localmente
 
 ```bash
-# npm
-npm install
+# clone the project
+git clone https://github.com/edmidev/yodev.git
 
-# pnpm
-pnpm install
+# move into the proyect
+cd yodev
 
-# yarn
-yarn install
+# install dependencies
+npm install 
 
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+# run proyect
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
