@@ -1,8 +1,6 @@
 <template>
     <div class="max-w-md mx-auto overflow-hidden md:max-w-2xl m-5 flex justify-between">
-            <p class="text-emerald-500 text-4xl">
-                Tasks list
-            </p>
+            <Title text="Tasks list" />
             <button v-if="!showForm" @click="showTaskForm" class="flex text-white bg-emerald-500 border-0 py-2 px-8 focus:outline-none hover:bg-emerald-600 rounded text-sm">
                 New task
             </button>
@@ -24,6 +22,7 @@
     import { ref } from 'vue'
     import { storeToRefs } from 'pinia'
     import { useTaskStore } from '../../stores/store';
+    import Title from '../home/title.vue'
 
     // refs to store
     const taskStore = useTaskStore()

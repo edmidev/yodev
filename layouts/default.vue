@@ -5,6 +5,7 @@
                 <NuxtLink to="/" class="font-bold text-lg">YODEV</NuxtLink>
                 <ul class="flex gap-4">
                     <li><NuxtLink to="/">Home</NuxtLink></li>
+                    <li><NuxtLink to="/instrunctions">Instructions</NuxtLink></li>
                     <li><NuxtLink to="/tasks" class="btn">Tasks</NuxtLink></li>
                 </ul>
             </nav>
@@ -18,7 +19,11 @@
 <style scoped>
 
     .router-link-exact-active {
-        color: #fd0000;
+        color: #38d880;
+    }
+    .btn.router-link-exact-active {
+        color: #fff;
+        font-weight: 600;
     }
 
 </style>

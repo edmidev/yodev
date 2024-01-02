@@ -5,10 +5,6 @@
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue'
-    import { storeToRefs } from 'pinia'
-    import { useTaskStore } from '../../stores/store';
-    
     // Define props of the component
     const props = defineProps({
         task: {
