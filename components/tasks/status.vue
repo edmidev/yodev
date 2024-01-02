@@ -5,13 +5,12 @@
 </template>
 
 <script setup lang="ts">
+    import type { Task } from '../../interfaces/Task'
+
     // Define props of the component
-    const props = defineProps({
-        task: {
-            type: Object,
-            default: () => {}
-        }
-    })
+    const props = defineProps<{
+        task: Task;
+    }>();
 
 </script>
 

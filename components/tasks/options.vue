@@ -22,18 +22,16 @@
 <script setup lang="ts">
     import { storeToRefs } from 'pinia'
     import { useTaskStore } from '../../stores/store';
+    import type { Task } from '../../interfaces/Task'
     
     // refs to store
     const taskStore = useTaskStore()
     const { editable } = storeToRefs(taskStore)
 
     // Define props of the component
-    const props = defineProps({
-        task: {
-            type: Object,
-            default: () => {}
-        }
-    })
+    const props = defineProps<{
+        task: Task;
+    }>();
 
     // Delete task from the store
     const deleteTask = () => {
@@ -53,7 +51,7 @@
 
     // Disable edit task
     const cancelEdit = () => {
-        taskStore.editTask('')
+        taskStore.editTask(null)
     }
 </script>
 
