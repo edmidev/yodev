@@ -1,40 +1,74 @@
 import { defineStore } from "pinia";
+import type { Task } from '../interfaces/Task'
+
+function generateUuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = (Math.random() * 16) | 0,
+        v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}
+
+interface MyStoreState {
+    tasks: Task[];
+    editable: string;
+}
 
 export const useTaskStore = defineStore({
     id: "task-store",
-    state: () => {
-        return {
-            tasks: [
-                {
-                    todo: "Do something nice for someone I care about",
-                    completed: false,
-                    isEdit: false
-                },
-                {
-                    todo: "Memorize the fifty states and their capitals",
-                    completed: false,
-                    isEdit: false
-                }
-            ]
-        }
+    state: (): MyStoreState => ({
+        tasks: [
+            {
+                uuid: generateUuid(),
+                todo: "Do something nice for someone I care about",
+                completed: false,
+                isEdit: false,
+            },
+            {
+                uuid: generateUuid(),
+                todo: "Memorize the fifty states and their capitals",
+                completed: false,
+                isEdit: false,
+            },
+        ],
+        editable: '',
+    }),
+    getters: {
+        getTaskByUuid: (state) => (uuid: string) => {
+            return state.tasks.find((task) => task.uuid === uuid) || null;
+        },
     },
 
     actions: {
         addTask(todo: string, completed: boolean, isEdit: boolean) {
-            this.tasks.push({
+            this.tasks.unshift({
+                uuid: generateUuid(),
                 todo,
                 completed,
                 isEdit
             })
         },
-        markAsCompleted(index: number) {
-            this.tasks[index].completed = true
+        markAsCompleted(uuid: string) {
+            const task = this.tasks.find((el) => el.uuid === uuid);
+
+            if (task) {
+                task.completed = true;
+            } 
         },
-        deleteTask(index: number) {
-            this.tasks.splice(index, 1)
+        deleteTask(uuid: string) {
+            this.tasks = this.tasks.filter((el) => el.uuid !== uuid);
         },
-        updateTask(index: number, todo: string){
-            this.tasks[index].todo = todo
+        updateTask(todo: string){
+            if(this.editable === '') return
+            const task = this.tasks.find((el) => el.uuid === this.editable);
+
+            if (task) {
+                task.todo = todo
+                this.editable = ''
+            } 
+        },
+        editTask(uuid: string) {
+            this.editable = uuid
         }
     }
 })
