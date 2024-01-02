@@ -68,8 +68,8 @@ export const useTaskStore = defineStore({
                 this.editable = ''
             } 
         },
-        editTask(t: Task) {
-            this.editable = t.uuid
+        editTask(t: Task | null) {
+            this.editable = t ? t.uuid : ''
         }
     }
 })
