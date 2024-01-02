@@ -4,8 +4,7 @@
         <div v-for="task in data" 
             class="max-w-md mx-auto rounded-xl shadow-md overflow-hidden md:max-w-2xl m-5"
             :class="{'bg-emerald-200': task.completed, 'bg-white': !task.completed }">
-            <div class="px-8 py-4 flex gap-4">
-                <Status :task="task"/>
+            <div class="px-8 py-4 flex gap-4">                
                 <div class="flex items-center w-full">
                     <div 
                         v-if="task.uuid === editable"
@@ -15,7 +14,7 @@
                             v-model="newTodo" 
                             type="text" 
                             placeholder="Update task value" 
-                            class="w-full bg-white rounded py-0 border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 text-sm outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out rounded-lg"
+                            class="w-full bg-white rounded py-0 border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 text-sm outline-none text-gray-700 px-3 leading-8 transition-colors duration-200 ease-in-out rounded-lg"
                         >
                     </div>
                     <div v-else
@@ -26,6 +25,7 @@
                 </div>
                 <Options :task="task"/>
             </div>
+            <Status :task="task"/>
         </div>
     </div>
 </template>
@@ -49,7 +49,8 @@
     // Enable edit specific task
     const editTask = (task: Task) => {
         if(task.completed) return
-
+        
+        newTodo.value = ''
         const taskToEdit = taskStore.getTaskByUuid(task.uuid);
 
         if (taskToEdit) {
