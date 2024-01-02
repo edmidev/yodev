@@ -31,10 +31,11 @@ export const useTaskStore = defineStore({
                 isEdit: false,
             },
         ],
+        // This state store actual uuid of editable task
         editable: '',
     }),
     getters: {
-        getTaskByUuid: (state) => (uuid: string) => {
+        getTaskByUuid: (state) => (uuid: string): Task | null => {
             return state.tasks.find((task) => task.uuid === uuid) || null;
         },
     },
@@ -48,18 +49,18 @@ export const useTaskStore = defineStore({
                 isEdit
             })
         },
-        markAsCompleted(uuid: string) {
-            const task = this.tasks.find((el) => el.uuid === uuid);
+        markAsCompleted(t: Task) {
+            const task = this.tasks.find((el) => el.uuid === t.uuid);
 
             if (task) {
                 task.completed = true;
             } 
         },
-        deleteTask(uuid: string) {
-            this.tasks = this.tasks.filter((el) => el.uuid !== uuid);
+        deleteTask(t: Task) {
+            this.tasks = this.tasks.filter((el) => el.uuid !== t.uuid);
         },
         updateTask(todo: string){
-            if(this.editable === '') return
+            if(!this.editable || !todo) return
             const task = this.tasks.find((el) => el.uuid === this.editable);
 
             if (task) {
@@ -67,8 +68,8 @@ export const useTaskStore = defineStore({
                 this.editable = ''
             } 
         },
-        editTask(uuid: string) {
-            this.editable = uuid
+        editTask(t: Task) {
+            this.editable = t.uuid
         }
     }
 })
